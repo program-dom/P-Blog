@@ -14,6 +14,11 @@ import smtplib
 import os
 from dotenv import load_dotenv
 from pathlib import Path
+from rq import Queue
+from worker import conn
+from contacts import sending_mail
+
+q = Queue(connection=conn)
 
 # loading and reading env var
 envars = Path('information.env')
@@ -187,19 +192,24 @@ def about():
 def contact():
     form = ContactForm()
     if form.validate_on_submit():
-        my_mail = os.environ.get('MY_MAIL')
-        password = os.environ.get('PASSWORD')
-        with smtplib.SMTP("smtp.gmail.com") as connect:
-            connect.starttls()
-            connect.login(user=my_mail, password=password)
-            connect.sendmail(
-                from_addr=my_mail,
-                to_addrs="dpoulomi58@yahoo.com",
-                msg=f"Subject:Website Mail\n\n Name:{form.name.data}\n"
-                    f"Email:{form.email.data}\n"
-                    f"Phone No:{form.phone.data}\n"
-                    f"Message:{form.message.data}"
-            )
+        name = form.name.data
+        email = form.email.data
+        phone = form.phone.data
+        message = form.message.data
+        q.enqueue(sending_mail, name, email, phone, message)
+        # my_mail = os.environ.get('MY_MAIL')
+        # password = os.environ.get('PASSWORD')
+        # with smtplib.SMTP("smtp.gmail.com") as connect:
+        #     connect.starttls()
+        #     connect.login(user=my_mail, password=password)
+        #     connect.sendmail(
+        #         from_addr=my_mail,
+        #         to_addrs="dpoulomi58@yahoo.com",
+        #         msg=f"Subject:Website Mail\n\n Name:{form.name.data}\n"
+        #             f"Email:{form.email.data}\n"
+        #             f"Phone No:{form.phone.data}\n"
+        #             f"Message:{form.message.data}"
+        #     )
         flash("Successfully sent your message!")
         return redirect(url_for('contact'))
     else:
