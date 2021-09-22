@@ -183,14 +183,12 @@ def about():
     return render_template("about.html")
 
 
-my_mail = os.getenv('MY_MAIL')
-password = os.getenv('PASSWORD')
-
-
 @app.route("/contact", methods=["POST", "GET"])
 def contact():
     form = ContactForm()
     if form.validate_on_submit():
+        my_mail = os.environ.get('MY_MAIL')
+        password = os.environ.get('PASSWORD')
         with smtplib.SMTP("smtp.gmail.com") as connect:
             connect.starttls()
             connect.login(user=my_mail, password=password)
