@@ -183,8 +183,8 @@ def about():
     return render_template("about.html")
 
 
-my_mail = os.getenv('MY_MAIL')
-password = os.getenv('PASSWORD')
+my_mail = os.environ.get('MY_MAIL')
+password = os.environ.get('PASSWORD')
 
 
 @app.route("/contact", methods=["POST", "GET"])
