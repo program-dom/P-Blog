@@ -196,7 +196,7 @@ def contact():
         email = form.email.data
         phone = form.phone.data
         message = form.message.data
-        q.enqueue(sending_mail, name, email, phone, message)
+        result = q.enqueue(sending_mail, name, email, phone, message)
         # my_mail = os.environ.get('MY_MAIL')
         # password = os.environ.get('PASSWORD')
         # with smtplib.SMTP("smtp.gmail.com") as connect:
