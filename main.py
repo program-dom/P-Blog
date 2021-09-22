@@ -26,7 +26,7 @@ Bootstrap(app)
 
 ##CONNECT TO DB
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('POSTGRES_DATABASE_URI')
-app.config['SQLALCHEMY_BINDS'] = {'users': 'sqlite:///users.db', 'comments': 'sqlite:///comments.db'}
+# app.config['SQLALCHEMY_BINDS'] = {'users': 'sqlite:///users.db', 'comments': 'sqlite:///comments.db'}
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -36,7 +36,7 @@ db = SQLAlchemy(app)
 class User(UserMixin, db.Model):
     # PARENT TABLE
     # using bind key to bind the table to the main db
-    __bind_key__ = "users"
+    # __bind_key__ = "users"
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), unique=True)
@@ -70,7 +70,7 @@ class BlogPost(db.Model):
 
 
 class Comments(db.Model):
-    __bind_key__ = "comments"
+    # __bind_key__ = "comments"
     __tablename__ = "comments"
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.Text, nullable=False)
