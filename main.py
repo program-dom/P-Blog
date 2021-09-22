@@ -11,9 +11,16 @@ from flask_gravatar import Gravatar
 from functools import wraps
 from flask import abort
 import smtplib
+import os
+from dotenv import load_dotenv
+from pathlib import Path
+
+# loading and reading env var
+envars = Path('information.env')
+load_dotenv(dotenv_path=envars)
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 ckeditor = CKEditor(app)
 Bootstrap(app)
 
@@ -176,8 +183,8 @@ def about():
     return render_template("about.html")
 
 
-my_mail = "dpoulomi576@gmail.com"
-password = 9954828810
+my_mail = os.getenv('MY_MAIL')
+password = os.getenv('PASSWORD')
 
 
 @app.route("/contact", methods=["POST", "GET"])
