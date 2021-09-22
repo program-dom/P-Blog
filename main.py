@@ -20,12 +20,12 @@ envars = Path('information.env')
 load_dotenv(dotenv_path=envars)
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 ckeditor = CKEditor(app)
 Bootstrap(app)
 
 ##CONNECT TO DB
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 app.config['SQLALCHEMY_BINDS'] = {'users': 'sqlite:///users.db', 'comments': 'sqlite:///comments.db'}
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
@@ -183,8 +183,8 @@ def about():
     return render_template("about.html")
 
 
-my_mail = os.getenv('MY_MAIL')
-password = os.getenv('PASSWORD')
+my_mail = os.environ.get('MY_MAIL')
+password = os.environ.get('PASSWORD')
 
 
 @app.route("/contact", methods=["POST", "GET"])
